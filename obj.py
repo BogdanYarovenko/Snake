@@ -12,7 +12,7 @@ class Snake:
         self.rect.center = self.get_random_pos()
         self.direct = vec2(0, 0)
         self.time = 0
-        self.step = 100
+        self.step = game.snake_speed
         self.len = 1
         self.seg = []
         self.dir = {pg.K_UP: 1, pg.K_DOWN: 1, pg.K_LEFT: 1, pg.K_RIGHT: 1}
@@ -70,7 +70,7 @@ class Snake:
         self.border()
 
     def draw(self):
-        [pg.draw.rect(self.game.screen, 'yellow', segment) for segment in self.seg]
+        [pg.draw.rect(self.game.screen, self.game.snake_color, segment) for segment in self.seg]
 
 
 class Apple:
@@ -81,4 +81,4 @@ class Apple:
         self.rect.center = self.game.snake.get_random_pos()
 
     def draw(self):
-            pg.draw.rect(self.game.screen, 'green', self.rect)
+        pg.draw.rect(self.game.screen, 'green', self.rect)
