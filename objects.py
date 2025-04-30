@@ -15,21 +15,25 @@ class Snake:
         self.dir = {pg.K_UP: 1, pg.K_DOWN: 1, pg.K_LEFT: 1, pg.K_RIGHT: 1}
 
     def border(self):
-       if(self.out_of_bounds()):
+       if(self.is_out_of_bounds()):
             self.game.new_game()
 
-    def out_of_bounds(self)-> bool:
-        if self.rect.left < 0 or self.rect.right > self.game.WINDOW_SIZE or self.rect.top < 0 or self.rect.bottom > self.game.WINDOW_SIZE:
-            return True
-        return False
+    def is_out_of_bounds(self)-> bool:
+        return self.rect.left < 0 or self.rect.right > self.game.WINDOW_SIZE or self.rect.top < 0 or self.rect.bottom > self.game.WINDOW_SIZE
     
     def check(self):
-        if self.rect.center == self.game.apple.rect.center:
+        if (self.has_collision()):
             self.game.apple.rect.center = self.get_random_pos()
             self.len += 1
 
+    def has_collision(self) -> bool:
+        return self.rect.colliderect(self.game.apple.rect)
+    
+    def has_self_collision(self) -> bool:
+        return len(self.seg) != len(set(segment.center for segment in self.seg))
+
     def selfeat(self):
-        if len(self.seg) != len(set(segment.center for segment in self.seg)):
+        if self.has_self_collision():
             self.game.new_game()
 
     def controls(self, event):

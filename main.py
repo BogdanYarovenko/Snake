@@ -117,6 +117,7 @@ class Game:
          for x in range(0, self.WINDOW_SIZE, self.TILE_SIZE)]
         [pg.draw.line(self.screen, [40] * 3, (0, y), (self.WINDOW_SIZE, y))
          for y in range(0, self.WINDOW_SIZE, self.TILE_SIZE)]
+        
 # New game method to initialize the snake and apple
     def new_game(self):
         self.snake = Snake(self)
