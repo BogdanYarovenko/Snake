@@ -1,8 +1,6 @@
 import pygame as pg
-from obj import *
+from objects import *
 import sys
-
-
 class Menu:
     def __init__(self, game):
         self.game = game
@@ -44,6 +42,8 @@ class Menu:
 
 
 class Settings:
+    # This class handles the settings menu for the game
+    # It allows the user to change the window size, snake color, and speed 
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
@@ -54,18 +54,23 @@ class Settings:
         self.colors = ['yellow', 'green', 'red', 'blue']
         self.color_index = 0
 
+
     def draw(self):
         self.screen.fill('black')
         for i, option in enumerate(self.options):
             color = 'white' if i == self.selected else 'gray'
             if option == "Save":
                 text = self.font.render(option, True, color)
+            elif option == "Speed":
+                speed_label = "Fast" if self.values[2] == 50 else "Slow"
+                text = self.font.render(f"{option}: {speed_label}", True, color)
             else:
                 text = self.font.render(f"{option}: {self.values[i]}", True, color)
             text_rect = text.get_rect(center=(self.game.WINDOW_SIZE / 2, self.game.WINDOW_SIZE / 2 + i * 100))
             self.screen.blit(text, text_rect)
         pg.display.flip()
 
+#Run the settings menu and handle user input
     def run(self):
         while True:
             for event in pg.event.get():
@@ -94,6 +99,7 @@ class Settings:
 class Game:
     def __init__(self):
         pg.init()
+        pg.display.set_caption("Snake Game")
         self.WINDOW_SIZE = 800
         self.TILE_SIZE = 40
         self.screen = pg.display.set_mode([self.WINDOW_SIZE] * 2)
@@ -104,27 +110,32 @@ class Game:
         self.settings = Settings(self)
         self.new_game()
 
+
+# Draw the grid lines
     def draw_grid(self):
         [pg.draw.line(self.screen, [40] * 3, (x, 0), (x, self.WINDOW_SIZE))
          for x in range(0, self.WINDOW_SIZE, self.TILE_SIZE)]
         [pg.draw.line(self.screen, [40] * 3, (0, y), (self.WINDOW_SIZE, y))
          for y in range(0, self.WINDOW_SIZE, self.TILE_SIZE)]
-
+# New game method to initialize the snake and apple
     def new_game(self):
         self.snake = Snake(self)
         self.apple = Apple(self)
 
+# Update the snake and apple positions
     def update(self):
         self.snake.update()
         pg.display.flip()
         self.clock.tick(60)
 
+# Draw the game elements on the screen
     def draw(self):
         self.screen.fill('black')
         self.draw_grid()
         self.snake.draw()
         self.apple.draw()
 
+# Check for events 
     def check_events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -132,6 +143,7 @@ class Game:
                 sys.exit()
             self.snake.controls(event)
 
+# Run the game loop
     def run(self):
         while True:
             action = self.menu.run()
