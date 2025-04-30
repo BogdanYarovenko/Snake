@@ -1,9 +1,6 @@
 import pygame as pg
 from random import randrange
-
 vector = pg.math.Vector2
-
-
 class Snake:
     def __init__(self, game):
         self.game = game
